@@ -71,3 +71,23 @@ Validação dos endpoints administrativos pendente.
 
 **Observação:**
 O redirecionamento demonstra a proteção da rota no frontend, mas não garante que o backend rejeite requisições administrativas de usuários sem permissão.
+
+### RNF-01 — Segurança de Dados
+
+**Resultado esperado:**
+O sistema deve realizar o hashing das senhas e armazená-las no banco de dados.
+
+**Procedimento:**
+Consulta somente de leitura ao PostgreSQL, verificando o tamanho e o prefixo dos valores armazenados no campo password.
+
+**Resultado observado:**
+
+- 3 registros analisados.
+- Todos apresentaram 60 caracteres.
+- Todos apresentaram o prefixo $2b$.
+- Os valores são compatíveis com hashes bcrypt.
+
+**Situação:** Conforme na amostra analisada.
+
+**Observação:**
+A consulta não comprova que todos os fluxos de criação ou alteração de senha estão conformes.
