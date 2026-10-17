@@ -1,0 +1,119 @@
+name: Caso de Teste
+description: Registrar um caso de teste planejado (Funcional, API, Regressão ou Casos extras)
+title: "[CT-XXX-00] "
+labels: ["caso-de-teste"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use o ID no título, por exemplo `[CT-AUTH-03] Login bloqueado para conta não verificada`.
+        A descrição completa de cada caso está em `qa/casos-de-teste.md`.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área
+      options:
+        - Autenticação (JWT)
+        - Check-in (Mídia)
+        - Pontos e Ranking
+    validations:
+      required: true
+
+  - type: input
+    id: requisito
+    attributes:
+      label: Requisito
+      placeholder: "RF-02"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tipo
+    attributes:
+      label: Tipo
+      options:
+        - Funcional
+        - API
+        - Regressão
+        - Casos extras
+    validations:
+      required: true
+
+  - type: dropdown
+    id: natureza
+    attributes:
+      label: Natureza
+      options:
+        - Positivo
+        - Negativo
+    validations:
+      required: true
+
+  - type: dropdown
+    id: prioridade
+    attributes:
+      label: Prioridade
+      options:
+        - Alta
+        - Média
+        - Baixa
+    validations:
+      required: true
+
+  - type: textarea
+    id: pre-condicoes
+    attributes:
+      label: Pré-condições
+      placeholder: "Usuário cadastrado e sem código de verificação confirmado."
+    validations:
+      required: true
+
+  - type: textarea
+    id: passos
+    attributes:
+      label: Passos
+      placeholder: |
+        1. Acessar /login
+        2. Informar e-mail e senha
+        3. Clicar em "Entrar"
+    validations:
+      required: true
+
+  - type: textarea
+    id: dados
+    attributes:
+      label: Dados de teste
+      description: Credenciais, corpo da requisição, arquivos usados.
+      render: json
+
+  - type: textarea
+    id: esperado
+    attributes:
+      label: Resultado esperado
+    validations:
+      required: true
+
+  - type: textarea
+    id: obtido
+    attributes:
+      label: Resultado obtido
+      description: Preencher na execução.
+
+  - type: dropdown
+    id: status
+    attributes:
+      label: Status da execução
+      options:
+        - Não executado
+        - Pass
+        - Fail
+        - Bloqueado
+      default: 0
+
+  - type: input
+    id: bug
+    attributes:
+      label: Bug vinculado
+      description: Se falhou, informar a Issue do bug.
+      placeholder: "#12"

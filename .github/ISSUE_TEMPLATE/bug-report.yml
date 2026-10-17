@@ -1,0 +1,144 @@
+name: Bug Report
+description: Registrar uma falha encontrada durante a execução dos testes
+title: "[BUG] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Título no formato: `[BUG] <onde> — <o que acontece>`
+        Exemplo: `[BUG] Login — conta não verificada consegue acessar o Dashboard`
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área
+      options:
+        - Autenticação (JWT)
+        - Check-in (Mídia)
+        - Pontos e Ranking
+        - Outra
+    validations:
+      required: true
+
+  - type: input
+    id: requisito
+    attributes:
+      label: Requisito violado
+      placeholder: "RF-02"
+    validations:
+      required: true
+
+  - type: input
+    id: caso
+    attributes:
+      label: Caso de teste relacionado
+      description: ID do caso que falhou, ou CT-EXTRA-xx se for um bug de casos-extras.
+      placeholder: "CT-AUTH-03"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severidade
+    attributes:
+      label: Severidade
+      options:
+        - Crítica (trava o sistema ou compromete a segurança)
+        - Maior (erro de lógica ou regra de negócio)
+        - Menor (erro visual ou de texto)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: prioridade
+    attributes:
+      label: Prioridade
+      options:
+        - Alta
+        - Média
+        - Baixa
+    validations:
+      required: true
+
+  - type: dropdown
+    id: camada
+    attributes:
+      label: Onde foi encontrado
+      multiple: true
+      options:
+        - Interface (navegador)
+        - API (Postman)
+        - Banco de dados
+        - Logs do Docker
+    validations:
+      required: true
+
+  - type: textarea
+    id: descricao
+    attributes:
+      label: Descrição
+      description: Resumo do problema em 1 a 3 frases.
+    validations:
+      required: true
+
+  - type: textarea
+    id: pre-condicoes
+    attributes:
+      label: Pré-condições
+
+  - type: textarea
+    id: passos
+    attributes:
+      label: Passos para reproduzir
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: esperado
+    attributes:
+      label: Resultado esperado
+    validations:
+      required: true
+
+  - type: textarea
+    id: obtido
+    attributes:
+      label: Resultado obtido
+    validations:
+      required: true
+
+  - type: textarea
+    id: request
+    attributes:
+      label: Requisição / resposta da API
+      description: Método, endpoint, corpo enviado, status HTTP e corpo da resposta.
+      render: http
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Trecho relevante de `docker-compose logs backend`.
+      render: shell
+
+  - type: textarea
+    id: evidencias
+    attributes:
+      label: Evidências
+      description: Arraste prints ou vídeos aqui.
+    validations:
+      required: true
+
+  - type: textarea
+    id: ambiente
+    attributes:
+      label: Ambiente
+      value: |
+        - SO:
+        - Navegador:
+        - Docker:
+        - Branch/commit do NaSalinha:
