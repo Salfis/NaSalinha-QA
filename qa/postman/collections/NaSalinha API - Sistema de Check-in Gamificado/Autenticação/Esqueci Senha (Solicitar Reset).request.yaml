@@ -1,0 +1,15 @@
+$kind: http-request
+description: Envia email com token para resetar senha. O token é válido por 1 hora.
+url: "{{baseUrl}}/auth/forgot-password"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "email": "lucas@example.com"
+    }
+auth:
+  type: noauth
+order: 4000

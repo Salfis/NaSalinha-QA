@@ -1,0 +1,3 @@
+$kind: collection
+description: Endpoints de autenticação e autorização
+order: 1000

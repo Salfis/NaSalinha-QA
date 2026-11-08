@@ -1,0 +1,7 @@
+$kind: http-request
+description: Retorna um registro de pontos específico. Requer role ADMIN.
+url: "{{baseUrl}}/points/:id"
+method: GET
+pathVariables:
+  id: 123e4567-e89b-12d3-a456-426614174000
+order: 3000

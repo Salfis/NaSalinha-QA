@@ -1,0 +1,5 @@
+$kind: http-request
+description: Retorna a temporada atualmente ativa (se houver).
+url: "{{baseUrl}}/seasons/active"
+method: GET
+order: 3000

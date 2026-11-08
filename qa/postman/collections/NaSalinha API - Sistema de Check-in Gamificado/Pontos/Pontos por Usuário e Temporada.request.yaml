@@ -1,0 +1,8 @@
+$kind: http-request
+description: Retorna o registro de pontos de um usuário em uma temporada específica.
+url: "{{baseUrl}}/points/user/:userId/season/:seasonId"
+method: GET
+pathVariables:
+  userId: 123e4567-e89b-12d3-a456-426614174000
+  seasonId: 123e4567-e89b-12d3-a456-426614174001
+order: 7000

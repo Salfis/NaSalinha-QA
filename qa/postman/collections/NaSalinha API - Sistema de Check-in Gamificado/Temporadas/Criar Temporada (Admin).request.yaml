@@ -1,0 +1,18 @@
+$kind: http-request
+description: "Cria uma nova temporada. Campos obrigatórios: name, startDate,
+  endDate. Requer role ADMIN."
+url: "{{baseUrl}}/seasons"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "name": "Temporada Verão 2024",
+      "description": "Temporada de check-ins do verão",
+      "startDate": "2024-12-01T00:00:00Z",
+      "endDate": "2025-03-01T00:00:00Z",
+      "pointsPerCheckIn": 10
+    }
+order: 1000

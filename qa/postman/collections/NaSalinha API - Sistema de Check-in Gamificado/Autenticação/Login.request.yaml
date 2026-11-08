@@ -1,0 +1,27 @@
+$kind: http-request
+description: Realiza login no sistema. Retorna accessToken (válido por 15 minutos) e refreshToken (válido por 7 dias). O accessToken é automaticamente salvo na variável de ambiente.
+url: "{{baseUrl}}/auth/login"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "email": "lucas@example.com",
+      "password": "senha123"
+    }
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: |-
+      if (pm.response.code === 200) {
+          const jsonData = pm.response.json();
+          if (jsonData.data && jsonData.data.accessToken) {
+              pm.environment.set('accessToken', jsonData.data.accessToken);
+              pm.environment.set('refreshToken', jsonData.data.refreshToken);
+          }
+      }
+    language: text/javascript
+order: 2000

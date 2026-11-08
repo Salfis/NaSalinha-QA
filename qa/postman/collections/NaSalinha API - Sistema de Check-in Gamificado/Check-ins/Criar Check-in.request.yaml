@@ -1,0 +1,11 @@
+$kind: http-request
+description: Cria um novo check-in para o usuário logado na temporada ativa. Requer foto no campo photo (multipart/form-data). Os pontos da temporada são adicionados automaticamente.
+url: "{{baseUrl}}/checkins"
+method: POST
+body:
+  type: formdata
+  content:
+    - type: file
+      key: photo
+      src: []
+order: 1000

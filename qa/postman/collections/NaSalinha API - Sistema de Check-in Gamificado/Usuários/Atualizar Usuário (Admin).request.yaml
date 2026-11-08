@@ -1,0 +1,18 @@
+$kind: http-request
+description: Atualiza dados de um usuário. Todos os campos são opcionais. Requer role ADMIN.
+url: "{{baseUrl}}/users/:id"
+method: PUT
+headers:
+  Content-Type: application/json
+pathVariables:
+  id: 123e4567-e89b-12d3-a456-426614174000
+body:
+  type: text
+  content: |-
+    {
+      "name": "Pedro Costa Atualizado",
+      "email": "pedro.novo@example.com",
+      "role": "MEMBER",
+      "isActive": true
+    }
+order: 4000

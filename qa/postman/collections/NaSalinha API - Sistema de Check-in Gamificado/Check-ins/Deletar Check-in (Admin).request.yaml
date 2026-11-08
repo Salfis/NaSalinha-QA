@@ -1,0 +1,7 @@
+$kind: http-request
+description: Remove um check-in do sistema. Requer role ADMIN.
+url: "{{baseUrl}}/checkins/:id"
+method: DELETE
+pathVariables:
+  id: 123e4567-e89b-12d3-a456-426614174000
+order: 6000

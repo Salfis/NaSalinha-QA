@@ -1,0 +1,5 @@
+$kind: http-request
+description: Lista todos os registros de pontos. Requer role ADMIN.
+url: "{{baseUrl}}/points"
+method: GET
+order: 2000

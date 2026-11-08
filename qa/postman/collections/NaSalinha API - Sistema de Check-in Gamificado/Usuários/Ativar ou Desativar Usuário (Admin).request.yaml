@@ -1,0 +1,7 @@
+$kind: http-request
+description: Alterna o status ativo/inativo de um usuário. Requer role ADMIN.
+url: "{{baseUrl}}/users/:id/toggle-status"
+method: PATCH
+pathVariables:
+  id: 123e4567-e89b-12d3-a456-426614174000
+order: 4500

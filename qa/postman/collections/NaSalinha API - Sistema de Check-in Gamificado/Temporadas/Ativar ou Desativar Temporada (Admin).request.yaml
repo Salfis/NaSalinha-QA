@@ -1,0 +1,7 @@
+$kind: http-request
+description: Alterna o status ativo/inativo de uma temporada. Requer role ADMIN.
+url: "{{baseUrl}}/seasons/:id/toggle-active"
+method: PATCH
+pathVariables:
+  id: 123e4567-e89b-12d3-a456-426614174000
+order: 6000

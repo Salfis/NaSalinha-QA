@@ -1,0 +1,5 @@
+$kind: http-request
+description: Lista todos os check-ins de todos os usuários. Requer role ADMIN.
+url: "{{baseUrl}}/checkins"
+method: GET
+order: 3000

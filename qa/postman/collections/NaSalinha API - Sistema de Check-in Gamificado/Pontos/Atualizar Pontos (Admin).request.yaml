@@ -1,0 +1,16 @@
+$kind: http-request
+description: Atualiza um registro de pontos. Requer role ADMIN.
+url: "{{baseUrl}}/points/:id"
+method: PUT
+headers:
+  Content-Type: application/json
+pathVariables:
+  id: 123e4567-e89b-12d3-a456-426614174000
+body:
+  type: text
+  content: |-
+    {
+      "totalPoints": 75,
+      "checkInsCount": 8
+    }
+order: 4000

@@ -1,0 +1,5 @@
+$kind: http-request
+description: Retorna o ranking geral de todos os usuários com total de pontos acumulados.
+url: "{{baseUrl}}/rankings"
+method: GET
+order: 1000

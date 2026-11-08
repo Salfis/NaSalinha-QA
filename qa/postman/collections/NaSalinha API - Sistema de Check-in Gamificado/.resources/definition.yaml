@@ -1,0 +1,12 @@
+$kind: collection
+description: Collection completa da API do NaSalinha com todos os endpoints documentados. Inclui autenticação, gestão de usuários, check-ins, temporadas, rankings e pontos.
+variables:
+  baseUrl: http://localhost:5001/api
+  accessToken: ""
+  refreshToken: ""
+auth:
+  - id: 4f5341d7-65a3-4db2-b4b5-26115a58568b
+    type: bearer
+    name: bearer auth
+    credentials:
+      token: "{{accessToken}}"

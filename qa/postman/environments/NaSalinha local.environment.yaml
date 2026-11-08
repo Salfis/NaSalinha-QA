@@ -1,0 +1,9 @@
+name: NaSalinha local
+values:
+  - key: baseUrl
+    value: http://localhost:5001/api
+  - key: accessToken
+    value: ''
+  - key: refreshToken
+    value: ''
+color: 300

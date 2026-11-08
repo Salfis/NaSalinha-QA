@@ -21,7 +21,7 @@ Para cada um dos requisitos eu especifiquei dois casos de teste, e para cada ár
   - maria@example.com — MEMBER
   - pedro@example.com — TRAINEE
 - Temporada ativa no seed: Temporada 2025.1, com 10 pontos por check-in.
-- Arquivos para teste: foto-valida-1.jpg, foto-valida-2.png, arquivo.pdf.
+- Arquivos para teste: foto-valida-1.jpg, foto-valida-2.jpg, arquivo.pdf.
 - Nas requisições protegidas da API, adicionar o header `Authorization: Bearer <accessToken>`.
 
 ## Rastreabilidade
@@ -367,7 +367,7 @@ Pedro já fez um check-in no dia (CT-CHK-01).
 
 **Procedimento:**
 
-1. Envie `POST /api/checkins` (form-data, campo photo) com a foto foto-valida-2.png.
+1. Envie `POST /api/checkins` (form-data, campo photo) com a foto foto-valida-2.jpg.
 2. Envie `POST /api/checkins` de novo com a mesma foto-valida-1.jpg.
 3. Consulte `GET /api/checkins/my-checkins`.
 
@@ -379,7 +379,7 @@ O passo 1 deve ser recusado (400 ou 409) com um aviso de que o limite diário de
 **Resultado obtido:**
 O passo 1 foi aceito com status `201 Created` e com a mensagem `"Check-in realizado com sucesso"`. O passo 2 também foi aceito com a mesma mensagem.
 
-**Evidências:** CT_CHK-02-primeiro-check-in-pedro.png, CT-CHK-02-login-pedro.png, CT-CHK-02-segundo-checkin-foto-diferente.png, CT-CHK-02-terceiro-checkin-foto-igual.png.
+**Evidências:** CT-CHK-02-primeiro-check-in-pedro.png, CT-CHK-02-login-pedro.png, CT-CHK-02-segundo-checkin-foto-diferente.png, CT-CHK-02-terceiro-checkin-foto-igual.png.
 
 Bug: #35
 
@@ -864,6 +864,8 @@ A coleção deve ter as mesmas rotas que a API.
 | não existe                                   | `PUT /checkins/:id`                | CT-CHK-04, CT-PTS-02 |
 
 O exemplo de login da coleção usa `joao@example.com`, que não existe no seed.
+
+**Evidências:** CT-EXTRA-01-rota-errada.png, CT-EXTRA-01-rota-inexistente-2.png, CT-EXTRA-01-rota-inexistente.png.
 
 Bug: #43
 

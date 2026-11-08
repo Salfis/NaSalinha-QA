@@ -1,0 +1,5 @@
+$kind: http-request
+description: Lista todos os usuários do sistema. Requer role ADMIN.
+url: "{{baseUrl}}/users"
+method: GET
+order: 2000

@@ -1,0 +1,25 @@
+$kind: http-request
+description: Renova o accessToken usando o refreshToken. Útil quando o accessToken expira (15 minutos). O novo accessToken é automaticamente salvo.
+url: "{{baseUrl}}/auth/refresh"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "refreshToken": "{{refreshToken}}"
+    }
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: |-
+      if (pm.response.code === 200) {
+          const jsonData = pm.response.json();
+          if (jsonData.data && jsonData.data.accessToken) {
+              pm.environment.set('accessToken', jsonData.data.accessToken);
+          }
+      }
+    language: text/javascript
+order: 3000

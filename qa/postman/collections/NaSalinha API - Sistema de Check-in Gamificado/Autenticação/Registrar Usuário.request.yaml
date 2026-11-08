@@ -1,0 +1,17 @@
+$kind: http-request
+description: "Cria um novo usuário no sistema. Os campos 'name', 'email' e 'password' são obrigatórios. O campo 'role' é opcional (padrão: MEMBER) e pode ser ADMIN, MEMBER ou TRAINEE."
+url: "{{baseUrl}}/auth/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "name": "Novo Usuário",
+      "email": "novo.usuario@example.com",
+      "password": "senha123"
+    }
+auth:
+  type: noauth
+order: 1000

@@ -1,0 +1,17 @@
+$kind: http-request
+description: "Atualiza um check-in. Campos opcionais: status (PENDING, APPROVED, REJECTED), notes e points. Requer role ADMIN."
+url: "{{baseUrl}}/checkins/:id"
+method: PUT
+headers:
+  Content-Type: application/json
+pathVariables:
+  id: 123e4567-e89b-12d3-a456-426614174000
+body:
+  type: text
+  content: |-
+    {
+      "status": "APPROVED",
+      "notes": "Check-in revisado",
+      "points": 10
+    }
+order: 5500

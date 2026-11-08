@@ -1,0 +1,7 @@
+$kind: http-request
+description: Retorna detalhes de uma temporada específica.
+url: "{{baseUrl}}/seasons/:id"
+method: GET
+pathVariables:
+  id: 123e4567-e89b-12d3-a456-426614174000
+order: 4000

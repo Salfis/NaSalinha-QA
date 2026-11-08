@@ -1,0 +1,5 @@
+$kind: http-request
+description: Lista todos os check-ins do usuário logado.
+url: "{{baseUrl}}/checkins/my-checkins"
+method: GET
+order: 2000

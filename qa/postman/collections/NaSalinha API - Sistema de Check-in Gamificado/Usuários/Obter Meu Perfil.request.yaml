@@ -1,0 +1,5 @@
+$kind: http-request
+description: Retorna os dados do usuário logado. Requer autenticação.
+url: "{{baseUrl}}/users/me"
+method: GET
+order: 1000

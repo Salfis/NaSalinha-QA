@@ -1,0 +1,7 @@
+$kind: http-request
+description: Retorna o ranking de uma temporada específica.
+url: "{{baseUrl}}/rankings/season/:seasonId"
+method: GET
+pathVariables:
+  seasonId: 123e4567-e89b-12d3-a456-426614174000
+order: 2000

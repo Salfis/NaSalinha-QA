@@ -1,0 +1,8 @@
+$kind: http-request
+description: Retorna detalhes de um check-in específico. Usuários normais só
+  podem ver seus próprios check-ins.
+url: "{{baseUrl}}/checkins/:id"
+method: GET
+pathVariables:
+  id: 123e4567-e89b-12d3-a456-426614174000
+order: 5000

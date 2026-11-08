@@ -1,0 +1,5 @@
+$kind: http-request
+description: Lista todas as temporadas.
+url: "{{baseUrl}}/seasons"
+method: GET
+order: 2000

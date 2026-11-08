@@ -1,0 +1,18 @@
+$kind: http-request
+description: Atualiza uma temporada. Todos os campos são opcionais. Requer role ADMIN.
+url: "{{baseUrl}}/seasons/:id"
+method: PUT
+headers:
+  Content-Type: application/json
+pathVariables:
+  id: 123e4567-e89b-12d3-a456-426614174000
+body:
+  type: text
+  content: |-
+    {
+      "name": "Temporada Verão 2024 - Atualizada",
+      "description": "Nova descrição",
+      "endDate": "2025-04-01T00:00:00Z",
+      "pointsPerCheckIn": 15
+    }
+order: 5000

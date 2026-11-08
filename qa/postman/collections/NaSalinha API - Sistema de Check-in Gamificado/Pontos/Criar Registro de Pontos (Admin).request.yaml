@@ -1,0 +1,16 @@
+$kind: http-request
+description: Cria um registro de pontos manualmente. Requer role ADMIN.
+url: "{{baseUrl}}/points"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "userId": "123e4567-e89b-12d3-a456-426614174000",
+      "seasonId": "123e4567-e89b-12d3-a456-426614174001",
+      "totalPoints": 50,
+      "checkInsCount": 5
+    }
+order: 1000
