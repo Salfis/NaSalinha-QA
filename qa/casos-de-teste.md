@@ -1,14 +1,14 @@
 # Casos de Teste — NaSalinha
 
-Planejamento de testes para as 3 áreas Core do sistema. Todos os testes foram planejados em torno da minha navegação pelo frontend, análise do código e leitura do documento de pré-requisitos de funcionamento da aplicação(`/qa/Requisitos.md`).
+Planejamento de testes para as 3 áreas Core do sistema. Todos os testes foram planejados em torno da minha navegação pelo frontend, análise do código e leitura do documento de pré-requisitos de funcionamento da aplicação (`/qa/Requisitos.md`).
 
 Para cada um dos requisitos eu especifiquei dois casos de teste, e para cada área existe pelo menos um caso de teste Funcional(frontend), um caso de teste de API e um caso de teste de Regressão.
 
 ## Organização:
 
-- **ID:** CT-AUTH define os testes de `Autenticação`, CT-CHK define os testes sobre `Check-in`, CT-PTS vai definir os testes de `Pontos e Ranking`, CT-REG são os casos teste de `Regressão`, CT-EXTRA são os casos de teste que foram definidos durante o projeto e usam a lable `casos-extras`.
+- **ID:** CT-AUTH define os testes de `Autenticação`, CT-CHK define os testes sobre `Check-in`, CT-PTS vai definir os testes de `Pontos e Ranking`, CT-REG são os casos teste de `Regressão`, CT-EXTRA são os casos de teste que foram definidos durante o projeto e usam a label `casos-extras`.
 - **Tipo:** Funcional (frontend), API (via Postman) ou Regressão.
-- **Positivo/Negativo:** testes positivos são testes para validar o cenário esperado, já os testes negativos validam se o sitema permite a entrada inválida ou ação que ele não deveria.
+- **Positivo/Negativo:** testes positivos são testes para validar o cenário esperado, já os testes negativos validam se o sistema permite a entrada inválida ou ação que ele não deveria.
 - **Situação:** Não executado, Pass, Fail ou Bloqueado.
 
 ## Ambiente
@@ -21,14 +21,14 @@ Para cada um dos requisitos eu especifiquei dois casos de teste, e para cada ár
   - maria@example.com — MEMBER
   - pedro@example.com — TRAINEE
 - Temporada ativa no seed: Temporada 2025.1, com 10 pontos por check-in.
-- Arquivos para teste: foto-valida-1.jpg, foto-valida-2.png, arquivo.pdf e foto-grande.jpg (maior que 5 MB).
+- Arquivos para teste: foto-valida-1.jpg, foto-valida-2.png, arquivo.pdf.
 - Nas requisições protegidas da API, adicionar o header `Authorization: Bearer <accessToken>`.
 
 ## Rastreabilidade
 
-- RF-01 — Cadastro e verificação do usuário: CT-AUTH-01, CT-AUTH-02
+- RF-01 — Cadastro e verificação do usuário: CT-AUTH-01
 - RF-02 — Restrição de login: CT-AUTH-03, CT-AUTH-04
-- RF-03 — Controle de acesso por nível (RBAC): CT-AUTH-05, CT-AUTH-06
+- RF-03 — Controle de acesso por nível (RBAC): CT-AUTH-02, CT-AUTH-05, CT-AUTH-06
 - RNF-01 — Segurança dos dados: CT-AUTH-07, CT-AUTH-08
 - RF-04 — Registro de atividade: CT-CHK-01, CT-CHK-02
 - RF-05 — Fluxo de status do check-in: CT-CHK-03, CT-CHK-04
@@ -38,7 +38,7 @@ Para cada um dos requisitos eu especifiquei dois casos de teste, e para cada ár
 - RF-08 — Consistência do saldo: CT-PTS-03, CT-PTS-04
 - RF-09 — Regras do ranking: CT-PTS-05, CT-PTS-06
 
-Total de casos de requisito: 22
+Total de casos de requisito: 22 + 3 casos extra.
 Total de casos de regressão: 3
 
 ---
@@ -107,13 +107,13 @@ A aplicação não deve permitir que alguém se cadastre como ADMIN pelo cadastr
 **Situação:** Fail.
 
 **Resultado obtido:**
-A aplicação permitiu a criação do perfil com `"role": "ADMIN"` e o status retornado foi `201 Created`, contrariando a regra de negócio da RF-03 em que os endpoints de gestão são restritos a usuários com perfil de ADMINISTRADOR, já que pelo cadastro público, toda pessoa conseguiria acesso de ADMIN.
+A aplicação permitiu a criação do perfil com `"role": "ADMIN"` retornou `201 Created`, contrariando a regra de negócio da RF-03 em que os endpoints de gestão são restritos a usuários com perfil de ADMINISTRADOR.
 
-**Observações:** A alteração do cargo de um usuário não está exatamente prevista nas regras de autenticação mas foi considerada como uma violação da RF-03, já que qualquer usuário consegue obter privilégios de administrador.
+**Observação:** A alteração do cargo de um usuário não está exatamente prevista nas regras de autenticação mas foi considerada como uma violação da RF-03, já que qualquer usuário consegue obter privilégios de administrador.
 
 **Evidências:** CT-AUTH-02-requisicao-de-registro.png
 
-Bug: #32
+Bug: #38
 
 ---
 
@@ -287,7 +287,7 @@ A senha não pode estar salva em texto puro: deve ser um hash bcrypt (começando
 **Resultado obtido:**
 A senha foi salva em hash bcrypt como era esperado (começa com $2b$ e tem 60 caracteres). As respostas da API testadas não mostram o campo password: `POST /api/auth/login` , `GET /api/users/me` , `GET /api/users`, `POST /api/auth/register`.
 
-**Evidências:** CT_AUTH-07-criar-usuario.png, CT-AUTH-07-registro-senha-hash.png, CT-AUTH-07-todas-as-senhas.png.
+**Evidências:** CT-AUTH-07-criar-usuario.png, CT-AUTH-07-registro-senha-hash.png, CT-AUTH-07-todas-as-senhas.png.
 
 ---
 
@@ -437,7 +437,7 @@ A requisição do MEMBER deve retornar 403 e o status deve continuar PENDENTE. A
 **Situação:** Pass.
 
 **Resultado obtido:**
-A requisição do MEMBER retornou `403 Forbidden` com a mensagem: `Sem permissão para acessar esse recurso` e o status continuou `PENDING`. A requisição do ADMIN retornou `200 OK` e o status mudou para `PENDING` sem problemas. O contrário foi testado também e o status mudou para `APPROVED` porém não foi adicionado às evidências.
+A requisição do MEMBER retornou `403 Forbidden` com a mensagem: "Sem permissão para acessar esse recurso" e o status continuou `PENDING`. A requisição do ADMIN retornou `200 OK` e o status mudou para `PENDING` sem problemas. O contrário foi testado também e o status mudou para `APPROVED` porém não foi adicionado às evidências.
 
 **Observação:**
 Como todo check-in já é criado como `APPROVED` (bug #34, CT-CHK-03), o check-in foi colocado como PENDING pelo ADMIN antes da execução, com o endpoint `PUT /api/checkins/{id}`.
@@ -473,6 +473,8 @@ O passo 1 retornou `200 OK`, com todos os dados do check-in da Maria. A lista do
 
 Bug: #33
 
+---
+
 ### CT-CHK-06 — Excluir check-in de outro usuário pela interface
 
 - Requisito: RF-06
@@ -500,7 +502,7 @@ Logado como ADMIN, os mesmos cards mostram o botão de excluir, o que confirma q
 **Observação:**
 A requisição `/api/checkins` devolve para qualquer usuário os check-ins de todos os usuários, junto com e-mail e ID.
 
-**Evidências:** CT-CHK-06-dashboard-lucas.png, CT-CHK-06-dashboard-admin.png, CT-CHK-06-rede-checkin.png
+**Evidências:** CT-CHK-06-dashboard-lucas.png, CT-CHK-06-dashboard-admin.png, CT-CHK-06-rede-checkins.png
 
 Bug: #33
 
@@ -557,7 +559,7 @@ O erro do passo 2 deve ser tratado com uma mensagem amigável. Nenhum arquivo no
 **Situação:** Fail.
 
 **Resultado obtido:**
-Com a credencial do Cloudinary alterada no env, `POST /api/checkins` retornou `500 Internal Server Error` com a mensagem "Falha no Upload da Imagem", e o log mostrou "Erro no upload para Cloudinary".
+Com a credencial do Cloudinary alterada no env, `POST /api/checkins` retornou `500 Internal Server Error` com a mensagem "Falha no upload da imagem", e o log mostrou "Erro no upload para Cloudinary".
 A pasta uploads/, que estava vazia, ficou com o arquivo `photo-1794158396688-40722033.jpg` depois da falha.
 Com a credencial restaurada, o check-in válido funcionou e não deixou arquivo novo na pasta.
 
@@ -622,7 +624,7 @@ O totalPoints do usuário deve passar a ser X − 10, já que um check-in rejeit
 
 **Resultado obtido:** O totalPoints do usuário (`lucas`, 20 pontos) não foi alterado mesmo após mudar o status do check-in para `REJECTED` (continuou com 20 pontos).
 
-**Observações:** O plano anterior para a CT-PTS-02 girava em torno de os check-ins iniciarem pendentes. Considerando o BUG #34, o teste foi modificado, já que iniciam aprovados (`APPROVED`).
+**Observação:** O plano anterior para a CT-PTS-02 girava em torno de os check-ins iniciarem pendentes. Considerando o BUG #34, o teste foi modificado, já que iniciam aprovados (`APPROVED`).
 
 **Evidências:** CT-PTS-02-seed-executada.png, CT-PTS-02-id-checkin-lucas.png, CT-PTS-02-pontuacao-lucas-antes.png, CT-PTS-02-status-checkin-lucas-atualizado.png, CT-PTS-02-pontuacao-lucas-depois.png
 
@@ -651,11 +653,11 @@ A exclusão deve retornar 200. O totalPoints deve passar para X − 10 e o check
 **Situação:** Fail.
 
 **Resultado obtido:**
-A exclusão retornou `200 OK`. O totalPoints de lucas continuou como X (20 pontos) ao em vez de X - 10 (10 pontos) e o checkInsCount continuou como N(`2`) e não diminuiu.
+A exclusão retornou `200 OK`. O totalPoints de lucas continuou como X (20 pontos) em vez de X - 10 (10 pontos) e o checkInsCount continuou como N(`2`) e não diminuiu.
 
 **Evidências:** CT-PTS-03-lucas-totalPoints-checkInsCount-antes.png, CT-PTS-03-delete-checkin-lucas.png, CT-PTS-03-lucas-totalPoints-checkInsCount-depois.png.
 
-Bug: 36
+Bug: #36
 
 ---
 
@@ -710,7 +712,7 @@ A API deve retornar 200 com os usuários em ordem decrescente de pontuação. A 
 
 **Situação:** Pass.
 
-**Resultado observado:**
+**Resultado obtido:**
 Executar a rota `GET /api/rankings` via Postman retornou Status `200 OK`, o corpo da resposta mostra os pontos e a ordem dos usuários, que estão iguais aos mostrados na interface( Ordem decrescente: Lucas (20), Maria (10) e Pedro (0) ).
 
 **Observação:** executado logo após o seed, antes dos outros testes de API.
@@ -755,6 +757,7 @@ Simulação: um bug reportado foi corrigido. Para cada área, estes são os test
 
 - Requisito: RF-02
 - Tipo: Regressão
+- Bugs corrigidos: #31, #32
 
 **Cenário simulado:**
 O bug "usuário não verificado consegue fazer login" foi corrigido.
@@ -772,7 +775,7 @@ Cadastro → recebimento do código → verificação → login → acesso ao da
 - CT-AUTH-08: o login depois da redefinição de senha usa o mesmo fluxo.
 - O login dos usuários que já existem (seed) deve continuar funcionando.
 
-**Situação:** Não executado.
+**Situação:** Bloqueado, aguardando a correção dos bugs listados acima.
 
 ---
 
@@ -780,6 +783,7 @@ Cadastro → recebimento do código → verificação → login → acesso ao da
 
 - Requisito: RF-05
 - Tipo: Regressão
+- Bug corrigido: #34
 
 **Cenário simulado:**
 O bug "check-in é criado já aprovado" foi corrigido.
@@ -797,7 +801,7 @@ Envio da foto → check-in PENDENTE → aprovação do ADMIN → pontos somados.
 - CT-PTS-05: o ranking continua consistente.
 - Os status (Pendente, Aprovado e Rejeitado) continuam aparecendo certo no dashboard.
 
-**Situação:** Não executado.
+**Situação:** Bloqueado, aguardando a correção dos bugs listados acima.
 
 ---
 
@@ -805,6 +809,7 @@ Envio da foto → check-in PENDENTE → aprovação do ADMIN → pontos somados.
 
 - Requisito: RF-08
 - Tipo: Regressão
+- Bug corrigido: #36
 
 **Cenário simulado:**
 O bug "excluir check-in não tira os pontos do usuário" foi corrigido.
@@ -823,12 +828,105 @@ Check-in aprovado → pontos somados → exclusão → pontos subtraídos → ra
 - Excluir um check-in rejeitado não deve tirar pontos, já que eles nunca foram somados.
 - O saldo do usuário nunca deve ficar negativo.
 
-**Situação:** Não executado.
+**Situação:** Bloqueado, aguardando a correção dos bugs listados acima.
 
 ---
 
 ## Casos extras
 
-Cenários encontrados durante a execução que não estavam no planejamento. Cada um recebe a label `casos-extras` e deve ter um bug report ligado a ele.
+Cenários que foram encontrados durante a execução que não estavam no planejamento. Cada um recebe a label `casos-extras` e deve ter um bug report ligado a ele.
 
-- CT-EXTRA-01 — (preencher durante a execução)
+### CT-EXTRA-01 — Coleção do Postman diferente das rotas da API
+
+- Requisito: nenhum (documentação da API)
+- Tipo: API (negativo)
+- Prioridade: Baixa
+
+**Como foi encontrado:**
+Durante os testes de API, pelo postman, algumas requisições da coleção não funcionaram ou não existiam. Precisei corrigir a URL/criar a requisição manualmente.
+
+**Procedimento:**
+
+1. Importar a coleção no Postman.
+2. Comparar as rotas da coleção com as rotas que estão no backend (`backend/src/routes/`).
+
+**Resultado esperado:**
+A coleção deve ter as mesmas rotas que a API.
+
+**Situação:** Fail.
+
+**Resultado obtido:**
+
+| Na coleção                                   | No backend                         | Encontrado no        |
+| -------------------------------------------- | ---------------------------------- | -------------------- |
+| `GET /checkins/me`                           | `GET /checkins/my-checkins`        | CT-CHK-02            |
+| `POST /seasons/:id/activate` e `/deactivate` | `PATCH /seasons/:id/toggle-active` | CT-AUTH-05           |
+| não existe                                   | `PUT /checkins/:id`                | CT-CHK-04, CT-PTS-02 |
+
+O exemplo de login da coleção usa `joao@example.com`, que não existe no seed.
+
+Bug: #43
+
+---
+
+### CT-EXTRA-02 — Usuário comum vendo o perfil de outro usuário
+
+- Requisito: RF-03
+- Tipo: API (negativo)
+- Prioridade: Alta
+
+**Como foi encontrado:**
+Na revisão das rotas de usuário, `GET /api/users/:id` não exige perfil ADMIN, ao contrário de `GET /api/users`.
+
+**Pré-condições:**
+Banco no estado do seed, token de lucas@example.com (MEMBER) e ID de maria@example.com.
+
+**Procedimento:**
+
+1. Fazer login como Lucas.
+2. Enviar `GET /api/users/{id-da-maria}`.
+3. Para comparar, enviar `GET /api/users` com o mesmo token.
+
+**Resultado esperado:**
+As duas requisições devem retornar 403, sem dados da Maria.
+
+**Situação:** Fail
+
+**Resultado obtido:**
+`GET /api/users/{id-da-maria}` retornou `200 OK` com Id, nome, email, role e data de criação, enquanto `GET /api/users` retornou `403 Forbidden` com uma mensagem "Sem permissão para acessar esse recurso".
+
+**Evidências:** CT-EXTRA-02-informacoes-maria-com-token-membro-lucas.png, CT-EXTRA-02-listagem-usuarios-token-membro.png.
+
+Bug: #44
+
+---
+
+### CT-EXTRA-03 — ADMIN alterando os pontos de um check-in para um valor inválido
+
+- Requisito: RF-07 / RF-08
+- Tipo: API (negativo)
+- Prioridade: Média
+
+**Como foi encontrado:**
+Durante o CT-PTS-02, o `PUT /api/checkins/:id` mostrou que aceita o campo `points`, além de `status`.
+
+**Pré-condições:**
+Banco no estado do seed, token de ADMIN e ID de um check-in APPROVED.
+
+**Procedimento:**
+
+1. Enviar `GET /api/rankings` e anotar o totalPoints do dono do check-in (X).
+2. Como ADMIN, enviar `PUT /api/checkins/{id}` com `{ "points": -50 }`.
+3. Enviar `GET /api/checkins/{id}` e `GET /api/rankings` de novo.
+
+**Resultado esperado:**
+O passo 2 deve ser recusado com 400, porque um check-in não pode valer pontos negativos.
+
+**Situação:** Fail
+
+**Resultado obtido:**
+O passo 2 retornou 200 OK e o check-in do usuário passou a ter "points" : -50. Os rankings seguiram inalterados mesmo após a execução (motivo registrado no bug #36).
+
+**Evidências:** CT-EXTRA-03-ranking-antes.png, CT-EXTRA-03-alteracao-checkin-passou.png, CT-EXTRA-03-ranking-depois.png
+
+Bug: #45
