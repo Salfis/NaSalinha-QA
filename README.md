@@ -132,3 +132,4 @@ Durante a trilha de QA, esse desafio permitirá desenvolver competências e a va
 - **GitHub Projects:** Organização e acompanhamento dos casos de teste e tarefas do projeto.
 - **GitHub Issues:** Registro e acompanhamento dos bugs encontrados durante os testes.
 - **Postman:** Execução dos testes de API utilizando a coleção que já foi disponibilizada em `docs/postman_NaSalinha.json`.
+- **Documentação:** A documentação adicional e obrigatória referente ao projeto está toda na pasta `qa/` incluída nesse repositório.
