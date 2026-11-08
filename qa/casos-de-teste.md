@@ -890,7 +890,7 @@ Banco no estado do seed, token de lucas@example.com (MEMBER) e ID de maria@examp
 **Resultado esperado:**
 As duas requisições devem retornar 403, sem dados da Maria.
 
-**Situação:** Fail
+**Situação:** Fail.
 
 **Resultado obtido:**
 `GET /api/users/{id-da-maria}` retornou `200 OK` com Id, nome, email, role e data de criação, enquanto `GET /api/users` retornou `403 Forbidden` com uma mensagem "Sem permissão para acessar esse recurso".
@@ -922,10 +922,10 @@ Banco no estado do seed, token de ADMIN e ID de um check-in APPROVED.
 **Resultado esperado:**
 O passo 2 deve ser recusado com 400, porque um check-in não pode valer pontos negativos.
 
-**Situação:** Fail
+**Situação:** Fail.
 
 **Resultado obtido:**
-O passo 2 retornou 200 OK e o check-in do usuário passou a ter "points" : -50. Os rankings seguiram inalterados mesmo após a execução (motivo registrado no bug #36).
+O passo 2 retornou 200 OK e o check-in do usuário passou a ter "points" : -50. Os rankings seguiram inalterados mesmo após a execução (motivo registrado no bug #40).
 
 **Evidências:** CT-EXTRA-03-ranking-antes.png, CT-EXTRA-03-alteracao-checkin-passou.png, CT-EXTRA-03-ranking-depois.png
 

@@ -37,7 +37,7 @@ AREA_REGRESSAO = {
     "03": "area:pontos",
 }
 
-TITULO_CASO = re.compile(r"^### (CT-(AUTH|CHK|PTS|REG)-(\d+))\s*(?::|—|-)\s*(.+)$")
+TITULO_CASO = re.compile(r"^### (CT-(AUTH|CHK|PTS|REG|EXTRA)-(\d+))\s*(?::|—|-)\s*(.+)$")
 
 
 def ler_casos(caminho):
@@ -85,6 +85,8 @@ def labels_do_caso(caso):
         area = AREA_REGRESSAO.get(caso["numero"])
         if area:
             labels.append(area)
+    elif caso["prefixo"] == "EXTRA":
+        labels.append("casos-extras")
     else:
         labels.append(LABEL_AREA[caso["prefixo"]])
     return labels
