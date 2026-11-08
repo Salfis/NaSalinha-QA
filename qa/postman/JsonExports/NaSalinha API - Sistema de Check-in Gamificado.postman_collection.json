@@ -1,0 +1,830 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "NaSalinha API - Sistema de Check-in Gamificado",
+    "description": "Collection completa da API do NaSalinha com todos os endpoints documentados. Inclui autenticação, gestão de usuários, check-ins, temporadas, rankings e pontos.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5001/api"
+    },
+    {
+      "key": "accessToken",
+      "value": ""
+    },
+    {
+      "key": "refreshToken",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Autenticação",
+      "description": "Endpoints de autenticação e autorização",
+      "item": [
+        {
+          "name": "Registrar Usuário",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Novo Usuário\",\n  \"email\": \"novo.usuario@example.com\",\n  \"password\": \"senha123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "Cria um novo usuário no sistema. Os campos 'name', 'email' e 'password' são obrigatórios. O campo 'role' é opcional (padrão: MEMBER) e pode ser ADMIN, MEMBER ou TRAINEE."
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.accessToken) {",
+                  "        pm.environment.set('accessToken', jsonData.data.accessToken);",
+                  "        pm.environment.set('refreshToken', jsonData.data.refreshToken);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"lucas@example.com\",\n  \"password\": \"senha123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Realiza login no sistema. Retorna accessToken (válido por 1 hora, conforme JWT_EXPIRES_IN) e refreshToken (válido por 7 dias). Os dois tokens são salvos automaticamente nas variáveis de ambiente."
+          },
+          "response": []
+        },
+        {
+          "name": "Renovar Token (Refresh)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.accessToken) {",
+                  "        pm.environment.set('accessToken', jsonData.data.accessToken);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "refresh"]
+            },
+            "description": "Renova o accessToken usando o refreshToken. Útil quando o accessToken expira (1 hora). O novo accessToken é salvo automaticamente."
+          },
+          "response": []
+        },
+        {
+          "name": "Esqueci Senha (Solicitar Reset)",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"lucas@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/forgot-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "forgot-password"]
+            },
+            "description": "Envia email com token para resetar senha. O token é válido por 1 hora."
+          },
+          "response": []
+        },
+        {
+          "name": "Resetar Senha",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"token-recebido-por-email\",\n  \"newPassword\": \"novaSenha123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/reset-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "reset-password"]
+            },
+            "description": "Reseta a senha usando o token recebido por email."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Usuários",
+      "description": "Endpoints de gestão de usuários",
+      "item": [
+        {
+          "name": "Obter Meu Perfil",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "me"]
+            },
+            "description": "Retorna os dados do usuário logado. Requer autenticação."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Todos Usuários (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"]
+            },
+            "description": "Lista todos os usuários do sistema. Requer role ADMIN."
+          },
+          "response": []
+        },
+        {
+          "name": "Obter Usuário por ID (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                }
+              ]
+            },
+            "description": "Retorna dados de um usuário específico. Requer role ADMIN."
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Usuário (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Pedro Costa Atualizado\",\n  \"email\": \"pedro.novo@example.com\",\n  \"role\": \"MEMBER\",\n  \"isActive\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                }
+              ]
+            },
+            "description": "Atualiza dados de um usuário. Todos os campos são opcionais. Requer role ADMIN."
+          },
+          "response": []
+        },
+        {
+          "name": "Ativar ou Desativar Usuário (Admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/:id/toggle-status",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", ":id", "toggle-status"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                }
+              ]
+            },
+            "description": "Alterna o status ativo/inativo de um usuário. Requer role ADMIN."
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Usuário (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                }
+              ]
+            },
+            "description": "Remove um usuário do sistema. Requer role ADMIN."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Check-ins",
+      "description": "Endpoints de gestão de check-ins",
+      "item": [
+        {
+          "name": "Criar Check-in",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "photo",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/checkins",
+              "host": ["{{baseUrl}}"],
+              "path": ["checkins"]
+            },
+            "description": "Cria um novo check-in para o usuário logado na temporada ativa. Requer foto no campo photo (multipart/form-data). Os pontos da temporada são adicionados automaticamente."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Meus Check-ins",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/checkins/my-checkins",
+              "host": ["{{baseUrl}}"],
+              "path": ["checkins", "my-checkins"]
+            },
+            "description": "Lista todos os check-ins do usuário logado."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Todos Check-ins (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/checkins",
+              "host": ["{{baseUrl}}"],
+              "path": ["checkins"]
+            },
+            "description": "Lista todos os check-ins de todos os usuários. Requer role ADMIN."
+          },
+          "response": []
+        },
+        {
+          "name": "Obter Check-in por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/checkins/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["checkins", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                }
+              ]
+            },
+            "description": "Retorna detalhes de um check-in específico. Usuários normais só podem ver seus próprios check-ins."
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Check-in (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"APPROVED\",\n  \"notes\": \"Check-in revisado\",\n  \"points\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/checkins/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["checkins", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                }
+              ]
+            },
+            "description": "Atualiza um check-in. Campos opcionais: status (PENDING, APPROVED, REJECTED), notes e points. Requer role ADMIN."
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Check-in (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/checkins/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["checkins", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                }
+              ]
+            },
+            "description": "Remove um check-in do sistema. Requer role ADMIN."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Temporadas",
+      "description": "Endpoints de gestão de temporadas",
+      "item": [
+        {
+          "name": "Criar Temporada (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Temporada Verão 2024\",\n  \"description\": \"Temporada de check-ins do verão\",\n  \"startDate\": \"2024-12-01T00:00:00Z\",\n  \"endDate\": \"2025-03-01T00:00:00Z\",\n  \"pointsPerCheckIn\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/seasons",
+              "host": ["{{baseUrl}}"],
+              "path": ["seasons"]
+            },
+            "description": "Cria uma nova temporada. Campos obrigatórios: name, startDate, endDate. Requer role ADMIN."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Todas Temporadas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/seasons",
+              "host": ["{{baseUrl}}"],
+              "path": ["seasons"]
+            },
+            "description": "Lista todas as temporadas."
+          },
+          "response": []
+        },
+        {
+          "name": "Obter Temporada Ativa",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/seasons/active",
+              "host": ["{{baseUrl}}"],
+              "path": ["seasons", "active"]
+            },
+            "description": "Retorna a temporada atualmente ativa (se houver)."
+          },
+          "response": []
+        },
+        {
+          "name": "Obter Temporada por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/seasons/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["seasons", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                }
+              ]
+            },
+            "description": "Retorna detalhes de uma temporada específica."
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Temporada (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Temporada Verão 2024 - Atualizada\",\n  \"description\": \"Nova descrição\",\n  \"endDate\": \"2025-04-01T00:00:00Z\",\n  \"pointsPerCheckIn\": 15\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/seasons/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["seasons", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                }
+              ]
+            },
+            "description": "Atualiza uma temporada. Todos os campos são opcionais. Requer role ADMIN."
+          },
+          "response": []
+        },
+        {
+          "name": "Ativar ou Desativar Temporada (Admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/seasons/:id/toggle-active",
+              "host": ["{{baseUrl}}"],
+              "path": ["seasons", ":id", "toggle-active"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                }
+              ]
+            },
+            "description": "Alterna o status ativo/inativo de uma temporada. Requer role ADMIN."
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Temporada (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/seasons/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["seasons", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                }
+              ]
+            },
+            "description": "Remove uma temporada do sistema. Requer role ADMIN."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Rankings",
+      "description": "Endpoints de rankings e classificações",
+      "item": [
+        {
+          "name": "Ranking Geral",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/rankings",
+              "host": ["{{baseUrl}}"],
+              "path": ["rankings"]
+            },
+            "description": "Retorna o ranking geral de todos os usuários com total de pontos acumulados."
+          },
+          "response": []
+        },
+        {
+          "name": "Ranking por Temporada",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/rankings/season/:seasonId",
+              "host": ["{{baseUrl}}"],
+              "path": ["rankings", "season", ":seasonId"],
+              "variable": [
+                {
+                  "key": "seasonId",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                }
+              ]
+            },
+            "description": "Retorna o ranking de uma temporada específica."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Pontos",
+      "description": "Endpoints de gestão de pontos",
+      "item": [
+        {
+          "name": "Criar Registro de Pontos (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"seasonId\": \"123e4567-e89b-12d3-a456-426614174001\",\n  \"totalPoints\": 50,\n  \"checkInsCount\": 5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/points",
+              "host": ["{{baseUrl}}"],
+              "path": ["points"]
+            },
+            "description": "Cria um registro de pontos manualmente. Requer role ADMIN."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Todos Pontos (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/points",
+              "host": ["{{baseUrl}}"],
+              "path": ["points"]
+            },
+            "description": "Lista todos os registros de pontos. Requer role ADMIN."
+          },
+          "response": []
+        },
+        {
+          "name": "Obter Pontos por ID (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/points/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["points", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                }
+              ]
+            },
+            "description": "Retorna um registro de pontos específico. Requer role ADMIN."
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Pontos (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"totalPoints\": 75,\n  \"checkInsCount\": 8\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/points/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["points", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                }
+              ]
+            },
+            "description": "Atualiza um registro de pontos. Requer role ADMIN."
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Pontos (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/points/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["points", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                }
+              ]
+            },
+            "description": "Remove um registro de pontos. Requer role ADMIN."
+          },
+          "response": []
+        },
+        {
+          "name": "Pontos por Usuário e Temporada",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/points/user/:userId/season/:seasonId",
+              "host": ["{{baseUrl}}"],
+              "path": ["points", "user", ":userId", "season", ":seasonId"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                {
+                  "key": "seasonId",
+                  "value": "123e4567-e89b-12d3-a456-426614174001"
+                }
+              ]
+            },
+            "description": "Retorna o registro de pontos de um usuário em uma temporada específica."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
